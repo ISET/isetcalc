@@ -121,7 +121,6 @@ const App = () => {
       case 'dlIPRGB':
       case 'dlOI':
     }
-    gridRef.current.api.deselectAll()
     
   }, [])
 
