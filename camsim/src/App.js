@@ -114,6 +114,17 @@ const App = () => {
     gridRef.current.api.deselectAll()
   }, [])
 
+  // Example using Grid's API
+  const buttonDownload = useCallback(e => {
+    switch (e.currentTarget.id) {
+      case 'dlSensorVolts':
+      case 'dlIPRGB':
+      case 'dlOI':
+    }
+    gridRef.current.api.deselectAll()
+    
+  }, [])
+
   return (
     <CContainer fluid>
       {/* Example using Grid's API */}
@@ -144,9 +155,9 @@ const App = () => {
           </CRow>
           <CRow className='align-items-center'>Image Caption Here</CRow>
           <CRow>
-            <button onClick={buttonListener}>Download Sensor Image (volts)</button>
-            <button onClick={buttonListener}>Download Processed Image (rgb)</button>
-            <button onClick={buttonListener}>Download Optical Image (large)</button>
+            <button id='dlSensorVolts' onClick={buttonDownload}>Download Sensor Image (volts)</button>
+            <button id='dlIPRGB' onClick={buttonDownload}>Download Processed Image (rgb)</button>
+            <button id='dlOI' onClick={buttonDownload}>Download Optical Image (large)</button>
           </CRow>
         </CCol>
       </CRow>
