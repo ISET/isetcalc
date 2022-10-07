@@ -40,7 +40,8 @@ for (let ii = 0; ii < imageData.length; ii++) {
       scene: imageData[ii].scenename,
       lens: imageData[ii].opticsname,
       sensor: imageData[ii].sensorname,
-      preview: imageDir + imageData[ii].jpegName
+      preview: imageDir + imageData[ii].jpegName,
+      jpegFile: imageData[ii].jpegName
     }
   ]
   if (ii == 0) {
@@ -67,7 +68,8 @@ const App = () => {
     { headerName: 'Scene', field: 'scene', filter: true },
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
-    { headerName: 'Preview', field: 'preview', hide: true}
+    { headerName: 'Preview', field: 'preview', hide: true},
+    { headerName: 'jpegName', field: 'jpegName', hide: true}
   ])
 
   // DefaultColDef sets props common to all Columns
@@ -91,6 +93,8 @@ const App = () => {
   // Example of consuming Grid Event
   let pImage
   let pI // This will be the preview image element
+  let selectedRow // for use later when we need to download
+
   const rowClickedListener = useCallback(event => {
     //console.log('cellClicked', event)
     console.log('Row Clicked: \n', event);
@@ -98,11 +102,9 @@ const App = () => {
 //    var pI = React.findDOMNode(this.refs.1);
     pI.src = event.data.preview;
     selectedImage.rgbData =  event.data.previewImage;
+    selectedRow = event.data;
 
     // NEED TO also change caption here, in a similar way
-
-    // And also the image data that could be downloaded
-    
 
   }, [])
   const sideBar = useMemo(
@@ -129,21 +131,30 @@ const App = () => {
   }, [])
 
   // Example using Grid's API
+  let dlName = '';
+  let dlPath = '';
   const buttonDownload = useCallback(event => {
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
         // FileSaver saveAs(Blob/File/Url,
         // optional DOMString filename, optional Object { autoBom })
-        console.log(gridRef.current);
+        console.log(selectedRow);
         break;
       case 'dlIPRGB':
+        dlPath = selectedRow.preview;
+        dlName = selectedRow.jpegName;
         break;
       case 'dlOI':
         break;
       default:
         // Nothing
     }
+    console.log(process.env.PUBLIC_URL);
+    console.log(dlPath);
+    console.log(dlName);
+    saveAs( 
+      process.env.PUBLIC_URL + dlPath, dlName);
     
   }, [])
 
