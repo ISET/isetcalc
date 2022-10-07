@@ -24,6 +24,13 @@ let imageData = require(dataDir + 'metadata.json')
 let previewImage = imageDir + imageData[0].jpegName
 let testImage = 'http://stanford.edu/favicon.ico'
 
+// When the user selects a row, we set the data files for possible download
+let selectedImage = {
+  sensorData: [],
+  rgbData: [],
+  oi: []
+}
+
 var rows
 for (let ii = 0; ii < imageData.length; ii++) {
   // keys seem to have to be unique so we'll add a unique integer!
@@ -92,6 +99,9 @@ const App = () => {
     pI.src = event.data.preview;
 
     // NEED TO also change caption here, in a similar way
+
+    // And also the image data that could be downloaded
+    
 
   }, [])
   const sideBar = useMemo(
