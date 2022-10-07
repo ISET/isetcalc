@@ -13,13 +13,16 @@ import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { CContainer, CRow, CCol, CImage } from '@coreui/react'
 
+// MUI since it has some free bits that CoreUI doesn't
+import Slider from '@mui/material/Slider';
+
 // Additional components
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver'
 
 // Load our rendered sensor images
 let dataDir = './data/'
 let imageDir = '/images/' // Should use /public by default?
-let imageData = require(dataDir + 'metadata.json') 
+let imageData = require(dataDir + 'metadata.json')
 
 let previewImage = imageDir + imageData[0].jpegName
 let testImage = 'http://stanford.edu/favicon.ico'
@@ -68,8 +71,8 @@ const App = () => {
     { headerName: 'Scene', field: 'scene', filter: true },
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
-    { headerName: 'Preview', field: 'preview', hide: true},
-    { headerName: 'jpegName', field: 'jpegName', hide: true}
+    { headerName: 'Preview', field: 'preview', hide: true },
+    { headerName: 'jpegName', field: 'jpegName', hide: true }
   ])
 
   // DefaultColDef sets props common to all Columns
@@ -97,19 +100,17 @@ const App = () => {
 
   const rowClickedListener = useCallback(event => {
     //console.log('cellClicked', event)
-    console.log('Row Clicked: \n', event);
+    console.log('Row Clicked: \n', event)
     pI = document.getElementById('previewImage')
-//    var pI = React.findDOMNode(this.refs.1);
-    pI.src = event.data.preview;
-    selectedImage.rgbData =  event.data.previewImage;
-    selectedRow = event.data;
+    //    var pI = React.findDOMNode(this.refs.1);
+    pI.src = event.data.preview
+    selectedImage.rgbData = event.data.previewImage
+    selectedRow = event.data
 
     // Also change preview caption
-    var pCaption;
-    pCaption = document.getElementById('previewCaption');
-    pCaption.textContent = event.data.jpegFile;
-
-
+    var pCaption
+    pCaption = document.getElementById('previewCaption')
+    pCaption.textContent = event.data.jpegFile
   }, [])
   const sideBar = useMemo(
     () => ({
@@ -130,31 +131,29 @@ const App = () => {
   )
 
   // Handle download buttons
-  let dlName = '';
-  let dlPath = '';
+  let dlName = ''
+  let dlPath = ''
   const buttonDownload = useCallback(event => {
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
         // Similar, but link to Voltage .json
-        break;
+        break
       case 'dlIPRGB': // Working
-        dlPath = selectedRow.preview;
-        dlName = selectedRow.jpegName;
-        break;
+        dlPath = selectedRow.preview
+        dlName = selectedRow.jpegName
+        break
       case 'dlOI':
         // Maybe similar, but OI can be very large,
         // so might require something different
-        break;
+        break
       default:
-        // Nothing
+      // Nothing
     }
-    console.log(process.env.PUBLIC_URL);
-    console.log(dlPath);
-    console.log(dlName);
-    saveAs( 
-      process.env.PUBLIC_URL + dlPath, dlName);
-    
+    console.log(process.env.PUBLIC_URL)
+    console.log(dlPath)
+    console.log(dlName)
+    saveAs(process.env.PUBLIC_URL + dlPath, dlName)
   }, [])
 
   return (
@@ -175,23 +174,41 @@ const App = () => {
             />
           </div>
         </CCol>
-        <CCol
-          width={400}
-          height={400}>
+        <CCol width={400} height={400}>
           <CRow className='align-items-center'>
-            <CImage id='previewImage'
-              rounded
-              thumbnail
-              src={previewImage}
-            />
+            <CImage id='previewImage' rounded thumbnail src={previewImage} />
           </CRow>
           <CRow className='align-items-center'>
-          <div id='previewCaption'> Image Caption </div>
+            <div id='previewCaption'> No Scene Selected </div>
           </CRow>
           <CRow>
-            <button id='dlSensorVolts' onClick={buttonDownload}>Download Sensor Image (volts)</button>
-            <button id='dlIPRGB' onClick={buttonDownload}>Download Processed Image (rgb)</button>
-            <button id='dlOI' onClick={buttonDownload}>Download Optical Image (large)</button>
+            <Slider>
+              aria-label='Exposure Time'
+              defaultValue={.1}
+              valueLabelDisplay='auto'
+              step={.05}
+              marks
+              min={0}
+              max={1}
+            </Slider>            >
+          </CRow>
+          <CRow className='align-items-center'>
+            Sensor Exposure Time
+          </CRow>
+          <CRow>
+            <button id='dlSensorVolts' onClick={buttonDownload}>
+              Download Sensor Image (volts)
+            </button>
+            </CRow>
+            <CRow>
+            <button id='dlIPRGB' onClick={buttonDownload}>
+              Download Processed Image (rgb)
+            </button>
+            </CRow>
+            <CRow>
+            <button id='dlOI' onClick={buttonDownload}>
+              Download Optical Image (large)
+            </button>
           </CRow>
         </CCol>
       </CRow>
