@@ -97,6 +97,7 @@ const App = () => {
     pI = document.getElementById('previewImage')
 //    var pI = React.findDOMNode(this.refs.1);
     pI.src = event.data.preview;
+    selectedImage.rgbData =  event.data.previewImage;
 
     // NEED TO also change caption here, in a similar way
 
