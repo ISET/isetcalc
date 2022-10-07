@@ -13,6 +13,9 @@ import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { CContainer, CRow, CCol, CImage } from '@coreui/react'
 
+// Additional components
+import { saveAs } from 'file-saver';
+
 // Load our rendered sensor images
 let dataDir = './data/'
 let imageDir = '/images/' // Should use /public by default?
@@ -34,7 +37,7 @@ for (let ii = 0; ii < imageData.length; ii++) {
     }
   ]
   if (ii == 0) {
-    rows = [newRow]
+    rows = newRow
   } else {
     rows = rows.concat(newRow)
   }
@@ -115,11 +118,20 @@ const App = () => {
   }, [])
 
   // Example using Grid's API
-  const buttonDownload = useCallback(e => {
-    switch (e.currentTarget.id) {
+  const buttonDownload = useCallback(event => {
+    // Need to figure out which scene & which file
+    switch (event.currentTarget.id) {
       case 'dlSensorVolts':
+        // FileSaver saveAs(Blob/File/Url,
+        // optional DOMString filename, optional Object { autoBom })
+        console.log(gridRef.current);
+        break;
       case 'dlIPRGB':
+        break;
       case 'dlOI':
+        break;
+      default:
+        // Nothing
     }
     
   }, [])

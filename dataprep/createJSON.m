@@ -62,10 +62,14 @@ for ii = 1:numel(oiFiles)
         % Auto-Exposure breaks with oncoming headlights, etc.
         % NOTE: This is a patch, as it doesn't work for fog, for example.
         %       Need to decide best default for Exposure time calc
-        eTime  = autoExposure(oi,sensor,.5,'mean');
+        aeMethod = 'mean';
+        eTime  = autoExposure(oi,sensor,.5,aeMethod);
         sensor = sensorSet(sensor,'exp time',eTime);
-
+        
+        tic;
         sensor = sensorCompute(sensor,oi);
+        toc;
+
         % append to our overall array
         imageArray = [imageArray sensor];
 
@@ -95,6 +99,11 @@ for ii = 1:numel(oiFiles)
         % we'd better have metadata by now!
         sensor.metadata.jpegName = ipFileName;
         sensor.metadata.thumbnailName = ipThumbnailName;
+
+        % right now not-used, but of course it
+        % makes a difference
+        sensor.metadata.exposureTime = eTime;
+        sensor.metadata.aeMethod = aeMethod;
 
         % We ONLY write out the metadata in the main .json
         % file to keep it of reasonable size
