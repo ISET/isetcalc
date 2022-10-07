@@ -104,7 +104,11 @@ const App = () => {
     selectedImage.rgbData =  event.data.previewImage;
     selectedRow = event.data;
 
-    // NEED TO also change caption here, in a similar way
+    // Also change preview caption
+    var pCaption;
+    pCaption = document.getElementById('previewCaption');
+    pCaption.textContent = event.data.jpegFile;
+
 
   }, [])
   const sideBar = useMemo(
@@ -125,27 +129,22 @@ const App = () => {
     []
   )
 
-  // Example using Grid's API
-  const buttonListener = useCallback(e => {
-    gridRef.current.api.deselectAll()
-  }, [])
-
-  // Example using Grid's API
+  // Handle download buttons
   let dlName = '';
   let dlPath = '';
   const buttonDownload = useCallback(event => {
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
-        // FileSaver saveAs(Blob/File/Url,
-        // optional DOMString filename, optional Object { autoBom })
-        console.log(selectedRow);
+        // Similar, but link to Voltage .json
         break;
-      case 'dlIPRGB':
+      case 'dlIPRGB': // Working
         dlPath = selectedRow.preview;
         dlName = selectedRow.jpegName;
         break;
       case 'dlOI':
+        // Maybe similar, but OI can be very large,
+        // so might require something different
         break;
       default:
         // Nothing
@@ -176,17 +175,19 @@ const App = () => {
             />
           </div>
         </CCol>
-        <CCol>
+        <CCol
+          width={400}
+          height={400}>
           <CRow className='align-items-center'>
             <CImage id='previewImage'
               rounded
               thumbnail
               src={previewImage}
-              width={400}
-              height={400}
             />
           </CRow>
-          <CRow className='align-items-center'>Image Caption Here</CRow>
+          <CRow className='align-items-center'>
+          <div id='previewCaption'> Image Caption </div>
+          </CRow>
           <CRow>
             <button id='dlSensorVolts' onClick={buttonDownload}>Download Sensor Image (volts)</button>
             <button id='dlIPRGB' onClick={buttonDownload}>Download Processed Image (rgb)</button>
