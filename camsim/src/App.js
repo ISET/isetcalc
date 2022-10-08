@@ -11,7 +11,7 @@ import ImageRenderer from './ImageRenderer.jsx'
 // Core UI & Bootstrap
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { CContainer, CRow, CCol, CImage } from '@coreui/react'
+import { CContainer, CRow, CCol, CImage, CFooter, CLink } from '@coreui/react'
 
 // MUI since it has some free bits that CoreUI doesn't
 import Slider from '@mui/material/Slider';
@@ -158,7 +158,26 @@ const App = () => {
 
   return (
     <CContainer fluid>
-      {/* Example using Grid's API */}
+      <CRow>
+        <h2>VistaLab's ISET Online Simulator</h2>
+        <h4>Stanford University</h4>
+        <p>
+        Welcome to our Online Camera Simulator.
+        We've used our ISET tools to generate a large number
+        of wavelength-dependent scenes, and created
+        optical images from them using a number of lenses.
+        Since the computation involved can be daunting, we've
+        pre-computed the images that are then recorded when
+        using a number of currently-available sensors.
+        </p>
+        <p>
+          You can select a scene, a lens, and a sensor, to get a highly-accurate 
+          simulated image. From there you can download the Voltage response that can 
+          be used to evaluate your own image processing pipeline, or a JPEG with
+          a simple rendering, or the original Optical Image if you want to do further
+          analysis on your own.
+        </p>
+      </CRow>
       <CRow className='align-items-start'>
         <CCol className='align-items-start'>
           <div className='ag-theme-alpine' style={{ width: 800, height: 600 }}>
@@ -212,6 +231,15 @@ const App = () => {
           </CRow>
         </CCol>
       </CRow>
+      <CFooter>
+  <div>
+    <span>&copy; 2022 VistaLab, Stanford University</span>
+  </div>
+  <div>
+    <span>Authored by</span>
+    <CLink href="https://vistalab.stanford.edu">VistaLab Team</CLink>
+  </div>
+</CFooter>
     </CContainer>
   )
 }
