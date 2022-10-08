@@ -1,20 +1,26 @@
 % Render & Export objects for use in oi2sensor
-% (P.S. Not all JSON anymore:))
 %
 % D. Cardinal, Stanford University, 2022
 %
 %% Set output folder
-outputFolder = fullfile(piRootPath,'local','computed');
+% I'm not sure where we want the data to go ultimately.
+% As it will wind up in the website and/or a db
+% We don't want it in our path or github (it wouldn't fit)
+%
+outputFolder = fullfile(calcRootPath,'local','computed');
 if ~isfolder(outputFolder)
     mkdir(outputFolder);
 end
 
 %% Export sensor(s)
+% Provide the sensors used for people to work with on their own
 sensorFiles = {'ar0132atSensorrgb.mat', 'MT9V024SensorRGB.mat'};
 
 if ~isfolder(fullfile(outputFolder,'sensors'))
     mkdir(fullfile(outputFolder,'sensors'))
 end
+
+% Write data for each sensor as a separate JSON file
 for ii = 1:numel(sensorFiles)
     load(sensorFiles{ii}); % assume they are on our path
     % change suffix to json
@@ -23,13 +29,20 @@ for ii = 1:numel(sensorFiles)
 end
 
 %% TBD Export Lenses
+% When we have the definitions of lenses we use,
+% we should export them so others can replicate/etc.
 
-%% TBD Export Scenes
+%% TBD Export "Scenes"
+% Our scenes won't typically be ISET scenes.
+% Instead they will be recipes usable by the
+% Vistalab version of PBRT and by ISET3d.
+
+%% ... Eventually see if we can modify illumination ...
 
 %% Export OIs
-%% NOTE:
-% They can include complex numbers that are not directly
-% usable in JSON, so we need to encode or re-work somehow
+%  OIs include complex numbers, which are not directly-accessible
+%  in standard JSON. They also become extremely large as JSON (or BSON)
+%  files. So for now, seems best to simply export the .mat files.
 imageArray = [];
 metadataArray = [];
 
