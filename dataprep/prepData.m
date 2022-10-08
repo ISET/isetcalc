@@ -1,4 +1,5 @@
-% Export objects to JSON for use in oi2sensor
+% Render & Export objects for use in oi2sensor
+% (P.S. Not all JSON anymore:))
 %
 % D. Cardinal, Stanford University, 2022
 %
