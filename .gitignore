@@ -1,3 +1,7 @@
+# public folder that includes rendered images
+public/images
+public/sensors
+
 # Logs
 logs
 *.log
