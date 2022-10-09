@@ -13,7 +13,7 @@ if ~isfolder(outputFolder)
 end
 
 %% Export sensor(s)
-% Provide the sensors used for people to work with on their own
+% Provide data for the sensors used so people can work with it on their own
 sensorFiles = {'ar0132atSensorrgb.mat', 'MT9V024SensorRGB.mat'};
 
 if ~isfolder(fullfile(outputFolder,'sensors'))
@@ -43,8 +43,14 @@ end
 %  OIs include complex numbers, which are not directly-accessible
 %  in standard JSON. They also become extremely large as JSON (or BSON)
 %  files. So for now, seems best to simply export the .mat files.
+
+% Create an array to store images recorded by our sensors
+sensorImageArray = [];
+
+% The Metadata Array is the non-image portion of those, which
+% is small enough to be kept in a single file & used for filtering
+imageMetadataArray = [];
 imageArray = [];
-metadataArray = [];
 
 % For now we have the OI folder in our Matlab path
 % As we add a large number we might want to enumerate a data folder
@@ -52,20 +58,14 @@ metadataArray = [];
 oiFiles = {'oi_001.mat', 'oi_002.mat', 'oi_fog.mat'};
 for ii = 1:numel(oiFiles)
     load(oiFiles{ii}); % assume they are on our path
-    % change suffix to json
-    [~, fName, fSuffix] = fileparts(oiFiles{ii});
-
-    % This is slow, and the files are too large for
-    % direct use, so turned off by default
-    % jsonwrite(fullfile(outputFolder,[fName '.json']), oi);
-
-    % Now, pre-compute sensor images
+    
+    % Pre-compute sensor images
     if ~isfolder(fullfile(outputFolder,'images'))
         mkdir(fullfile(outputFolder,'images'))
     end
     for iii = 1:numel(sensorFiles)
         load(sensorFiles{iii}); % assume they are on our path
-        % change suffix to json
+        % prep for changing suffix to json
         [~, sName, fSuffix] = fileparts(sensorFiles{iii});
 
         % At least for now, scale sensor
@@ -77,9 +77,12 @@ for ii = 1:numel(oiFiles)
         % NOTE: This is a patch, as it doesn't work for fog, for example.
         %       Need to decide best default for Exposure time calc
         aeMethod = 'mean';
-        eTime  = autoExposure(oi,sensor,.5,aeMethod);
+        aeMean = .5;
+        eTime  = autoExposure(oi,sensor,aeMean,aeMethod);
         sensor = sensorSet(sensor,'exp time',eTime);
         
+        % See how long this takes in case we want
+        % to allow users to do it in real-time on our server
         tic;
         sensor = sensorCompute(sensor,oi);
         toc;
@@ -90,47 +93,45 @@ for ii = 1:numel(oiFiles)
         % Here we save the preview images
         % We use the fullfile for local write
         % and just the filename for web use
-        ipFileName = [fName '-' sName '.jpg'];
+        ipJPEGName = [fName '-' sName '.jpg'];
         ipThumbnailName = [fName '-' sName '-thumbnail.jpg'];
 
-        ipLocalJPEG = fullfile(outputFolder,'images',ipFileName);
+        % "Local" is our ISET filepath, not the website path
+        ipLocalJPEG = fullfile(outputFolder,'images',ipJPEGName);
         ipLocalThumbnail = fullfile(outputFolder,'images',ipThumbnailName);
 
+        % Create a default IP so we can see some baseline image
+        % This could of course be tweaked
         ip = ipCreate('ourIP',sensor);
         ip = ipCompute(ip, sensor);
 
-        % save using default IP as preview
+        % save an RGB JPEG using our default IP so we can show a preview
         outputFile = ipSaveImage(ip, ipLocalJPEG);
-        % we can save without an IP if we want
+        
+        % we could also save without an IP if we want
         %sensorSaveImage(sensor, sensorJPEG  ,'rgb');
 
-        % It's late & I'm lazy so generating a thumbnail
-        % by reading the jpeg back in, etc.
+        % Generate a quick thumbnail
         thumbnail = imread(ipLocalJPEG);
         thumbnail = imresize(thumbnail, [128 128]);
         imwrite(thumbnail, ipLocalThumbnail);
 
-        % we'd better have metadata by now!
-        sensor.metadata.jpegName = ipFileName;
+        % We need to save the relative paths for the website to use
+        sensor.metadata.jpegName = ipJPEGName;
         sensor.metadata.thumbnailName = ipThumbnailName;
 
-        % right now not-used, but of course it
-        % makes a difference
+        % Stash exposure time for reference
         sensor.metadata.exposureTime = eTime;
         sensor.metadata.aeMethod = aeMethod;
 
         % We ONLY write out the metadata in the main .json
         % file to keep it of reasonable size
-        metadataArray = [metadataArray sensor.metadata];
+        imageMetadataArray = [imageMetadataArray sensor.metadata];
         jsonwrite(fullfile(outputFolder,'images', [fName '-' sName '.json']), sensor);
 
     end
 
-    % NOTE: Full images are large,
-    %       So look at metadata JSON array
-    %       and separate images
-    jsonwrite(fullfile(outputFolder,'images','images.json'), imageArray);
-    jsonwrite(fullfile(outputFolder,'images','metadata.json'), metadataArray);
-
+    % We can write metadata as one file
+    jsonwrite(fullfile(outputFolder,'images','metadata.json'), imageMetadataArray);
 
 end
