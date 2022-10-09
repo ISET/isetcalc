@@ -1,6 +1,6 @@
 # public folder that includes rendered images
-public/images
-public/sensors
+camsim/public/images
+camsim/public/sensors
 
 # Logs
 logs
