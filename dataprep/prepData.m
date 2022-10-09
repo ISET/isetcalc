@@ -58,8 +58,16 @@ imageMetadataArray = [];
 oiFiles = {'oi_001.mat', 'oi_002.mat', 'oi_fog.mat'};
 for ii = 1:numel(oiFiles)
     load(oiFiles{ii}); % assume they are on our path
-    [~, fName, ~] = fileparts(oiFiles{ii});
-    
+
+    [~, fName, fSuffix] = fileparts(oiFiles{ii});
+
+    % Start with a copy of the Raw OI to the website
+    if ~isfolder(fullfile(outputFolder,'oi'))
+        mkdir(fullfile(outputFolder,'oi'))
+    end
+    oiDataFile = fullfile(outputFolder,'oi',[fName fSuffix]);
+    copyfile(which(oiFiles{ii}), oiDataFile);
+
     % Pre-compute sensor images
     if ~isfolder(fullfile(outputFolder,'images'))
         mkdir(fullfile(outputFolder,'images'))
@@ -122,10 +130,16 @@ for ii = 1:numel(oiFiles)
         sensor.metadata.exposureTime = eTime;
         sensor.metadata.aeMethod = aeMethod;
 
+        % Save OI & Raw sensor file locations
+        sensor.metadata.oiFile = oiDataFile;
+
         % We ONLY write out the metadata in the main .json
         % file to keep it of reasonable size
         imageMetadataArray = [imageMetadataArray sensor.metadata];
-        jsonwrite(fullfile(outputFolder,'images', [fName '-' sName '.json']), sensor);
+        
+        sensorDataFile = [fName '-' sName '.json'];
+        sensor.metadata.sensorRawFile = sensorDataFile;
+        jsonwrite(fullfile(outputFolder,'images', sensorDataFile), sensor);
 
     end
 

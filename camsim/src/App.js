@@ -48,12 +48,21 @@ for (let ii = 0; ii < imageData.length; ii++) {
   // Some visible, some hidden for other uses
   let newRow = [
     {
+      // Columns displayed to user
       thumbnail: imageDir + imageData[ii].thumbnailName,
       scene: imageData[ii].scenename,
       lens: imageData[ii].opticsname,
       sensor: imageData[ii].sensorname,
+
+      // Used to set the file for the preview window
       preview: imageDir + imageData[ii].jpegName,
+
+      // Used for download files
       jpegFile: imageData[ii].jpegName,
+      sensorRawFile: imageData[ii].sensorRawFile,
+      oiFile: imageData[ii].oiFile,
+
+      // Used for other metadata properties
       eTime: imageData[ii].exposureTime,
       aeMethod: imageData[ii].aeMethod
     }
@@ -85,6 +94,8 @@ const App = () => {
     // Hidden fields for addtional info
     { headerName: 'Preview', field: 'preview', hide: true },
     { headerName: 'jpegName', field: 'jpegName', hide: true },
+    { headerName: 'sensorRawName', field: 'sensorRawFile', hide: true },
+    { headerName: 'oiName', field: 'oiFile', hide: true },
     { headerName: 'ExposureTime', field: 'eTime', hide: true },
     { headerName: 'AE-Method', field: 'aeMethod', hide: true }
   ])
@@ -157,7 +168,9 @@ const App = () => {
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
-        // Similar, but link to Voltage .json
+        dlPath = selectedRow.sensorRawFile
+        // dlName should be something local!!
+        dlName = selectedRow.sensorRawFile
         break
       case 'dlIPRGB': // Working
         dlPath = selectedRow.preview
