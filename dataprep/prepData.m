@@ -11,7 +11,7 @@ outputFolder = fullfile(calcRootPath,'camsim','public');
 if ~isfolder(outputFolder)
     mkdir(outputFolder);
 end
-privateDataFolder = fullfile(calcRootPath,'camsim','src');
+privateDataFolder = fullfile(calcRootPath,'camsim','src','data');
 
 %% Export sensor(s)
 % Provide data for the sensors used so people can work with it on their own
@@ -25,8 +25,8 @@ end
 for ii = 1:numel(sensorFiles)
     load(sensorFiles{ii}); % assume they are on our path
     % change suffix to json
-    [~, fName, fSuffix] = fileparts(sensorFiles{ii});
-    jsonwrite(fullfile(outputFolder,'sensors',[fName '.json']), sensor);
+    [~, sName, fSuffix] = fileparts(sensorFiles{ii});
+    jsonwrite(fullfile(outputFolder,'sensors',[sName '.json']), sensor);
 end
 
 %% TBD Export Lenses
@@ -51,7 +51,6 @@ sensorImageArray = [];
 % The Metadata Array is the non-image portion of those, which
 % is small enough to be kept in a single file & used for filtering
 imageMetadataArray = [];
-imageArray = [];
 
 % For now we have the OI folder in our Matlab path
 % As we add a large number we might want to enumerate a data folder
@@ -59,6 +58,7 @@ imageArray = [];
 oiFiles = {'oi_001.mat', 'oi_002.mat', 'oi_fog.mat'};
 for ii = 1:numel(oiFiles)
     load(oiFiles{ii}); % assume they are on our path
+    [~, fName, ~] = fileparts(oiFiles{ii});
     
     % Pre-compute sensor images
     if ~isfolder(fullfile(outputFolder,'images'))
@@ -67,7 +67,7 @@ for ii = 1:numel(oiFiles)
     for iii = 1:numel(sensorFiles)
         load(sensorFiles{iii}); % assume they are on our path
         % prep for changing suffix to json
-        [~, sName, fSuffix] = fileparts(sensorFiles{iii});
+        [~, sName, ~] = fileparts(sensorFiles{iii});
 
         % At least for now, scale sensor
         % to match the FOV
@@ -87,9 +87,6 @@ for ii = 1:numel(oiFiles)
         tic;
         sensor = sensorCompute(sensor,oi);
         toc;
-
-        % append to our overall array
-        imageArray = [imageArray sensor];
 
         % Here we save the preview images
         % We use the fullfile for local write

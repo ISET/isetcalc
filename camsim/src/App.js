@@ -12,6 +12,14 @@ import ImageRenderer from './ImageRenderer.jsx'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import { CContainer, CRow, CCol, CImage, CFooter, CLink } from '@coreui/react'
+import {
+  CTable,
+  CTableHead,
+  CTableRow,
+  CTableBody,
+  CTableHeaderCell,
+  CTableDataCell
+} from '@coreui/react'
 
 // MUI since it has some free bits that CoreUI doesn't
 import Slider from '@mui/material/Slider'
@@ -36,7 +44,8 @@ let selectedImage = {
 
 var rows
 for (let ii = 0; ii < imageData.length; ii++) {
-  // keys seem to have to be unique so we'll add a unique integer!
+  // Read image objects into grid rows
+  // Some visible, some hidden for other uses
   let newRow = [
     {
       thumbnail: imageDir + imageData[ii].thumbnailName,
@@ -44,7 +53,9 @@ for (let ii = 0; ii < imageData.length; ii++) {
       lens: imageData[ii].opticsname,
       sensor: imageData[ii].sensorname,
       preview: imageDir + imageData[ii].jpegName,
-      jpegFile: imageData[ii].jpegName
+      jpegFile: imageData[ii].jpegName,
+      eTime: imageData[ii].exposureTime,
+      aeMethod: imageData[ii].aeMethod
     }
   ]
   if (ii == 0) {
@@ -55,11 +66,11 @@ for (let ii = 0; ii < imageData.length; ii++) {
 }
 
 const App = () => {
-  const gridRef = useRef() 
+  const gridRef = useRef()
 
   // let the grid know which columns and what data to use
   const [rowData] = useState(rows)
-  
+
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -71,8 +82,11 @@ const App = () => {
     { headerName: 'Scene', field: 'scene', filter: true },
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
+    // Hidden fields for addtional info
     { headerName: 'Preview', field: 'preview', hide: true },
-    { headerName: 'jpegName', field: 'jpegName', hide: true }
+    { headerName: 'jpegName', field: 'jpegName', hide: true },
+    { headerName: 'ExposureTime', field: 'eTime', hide: true },
+    { headerName: 'AE-Method', field: 'aeMethod', hide: true }
   ])
 
   // DefaultColDef sets props common to all Columns
@@ -107,10 +121,16 @@ const App = () => {
     selectedImage.rgbData = event.data.previewImage
     selectedRow = event.data
 
-    // Also change preview caption
-    var pCaption
+    // Change preview caption
+    var pCaption, eTime, aeMethod
     pCaption = document.getElementById('previewCaption')
-    pCaption.textContent = event.data.jpegFile
+    pCaption.textContent = event.data.jpegFile;
+
+    // Update property table
+    eTime = document.getElementById('eTime');
+    eTime.textContent = event.data.eTime;
+    aeMethod = document.getElementById('aeMethod');
+    aeMethod.textContent = event.data.aeMethod;
   }, [])
   const sideBar = useMemo(
     () => ({
@@ -223,9 +243,37 @@ const App = () => {
               Download Optical Image (large)
             </button>
           </CRow>
-          <CRow> 
-          <CCol>'Exposure Time:  "</CCol>
-          <CCol>.5555</CCol>
+          <CRow>
+            <CTable>
+              <CTableHead>
+                <CTableRow>
+                  <CTableHeaderCell scope='col'>Property:</CTableHeaderCell>
+                  <CTableHeaderCell scope='col'>Value:</CTableHeaderCell>
+                </CTableRow>
+              </CTableHead>
+              <CTableBody id='imageProps'>
+                <CTableRow color='primary'>
+                  <CTableDataCell>Expsoure:</CTableDataCell>
+                  <CTableDataCell id='eTime'>...</CTableDataCell>
+                </CTableRow>
+                <CTableRow color='secondary'>
+                  <CTableDataCell>AE Method</CTableDataCell>
+                  <CTableDataCell id='aeMethod'>...</CTableDataCell>
+                </CTableRow>
+                <CTableRow color='primary'>
+                  <CTableDataCell>...</CTableDataCell>
+                  <CTableDataCell>...</CTableDataCell>
+                </CTableRow>
+                <CTableRow color='secondary'>
+                  <CTableDataCell>...</CTableDataCell>
+                  <CTableDataCell>...</CTableDataCell>
+                </CTableRow>
+                <CTableRow color='primary'>
+                  <CTableDataCell>...</CTableDataCell>
+                  <CTableDataCell>...</CTableDataCell>
+                </CTableRow>
+              </CTableBody>
+            </CTable>
           </CRow>
         </CCol>
       </CRow>
@@ -234,7 +282,7 @@ const App = () => {
           <span>&copy; 2022 VistaLab, Stanford University</span>
         </div>
         <div>
-          <span>Authored by</span>
+          <span>...</span>
           <CLink href='https://vistalab.stanford.edu'>VistaLab Team</CLink>
         </div>
       </CFooter>
