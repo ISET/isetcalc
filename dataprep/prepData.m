@@ -7,10 +7,11 @@
 % As it will wind up in the website and/or a db
 % We don't want it in our path or github (it wouldn't fit)
 %
-outputFolder = fullfile(calcRootPath,'local','computed');
+outputFolder = fullfile(calcRootPath,'camsim','public');
 if ~isfolder(outputFolder)
     mkdir(outputFolder);
 end
+privateDataFolder = fullfile(calcRootPath,'camsim','src');
 
 %% Export sensor(s)
 % Provide data for the sensors used so people can work with it on their own
@@ -131,7 +132,8 @@ for ii = 1:numel(oiFiles)
 
     end
 
-    % We can write metadata as one file
-    jsonwrite(fullfile(outputFolder,'images','metadata.json'), imageMetadataArray);
+    % We can write metadata as one file -- but since it is only
+    % read by our code, we place it in the code folder tree
+    jsonwrite(fullfile(privateDataFolder,'metadata.json'), imageMetadataArray);
 
 end

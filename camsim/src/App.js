@@ -14,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { CContainer, CRow, CCol, CImage, CFooter, CLink } from '@coreui/react'
 
 // MUI since it has some free bits that CoreUI doesn't
-import Slider from '@mui/material/Slider';
+import Slider from '@mui/material/Slider'
 
 // Additional components
 import { saveAs } from 'file-saver'
@@ -55,11 +55,11 @@ for (let ii = 0; ii < imageData.length; ii++) {
 }
 
 const App = () => {
-  const gridRef = useRef() // Optional - for accessing Grid's API
-  //const [rowData, setRowData] = useState(); // Set rowData to Array of Objects, one Object per Row
+  const gridRef = useRef() 
+
   // let the grid know which columns and what data to use
   const [rowData] = useState(rows)
-
+  
   // Each Column Definition results in one Column.
   const [columnDefs, setColumnDefs] = useState([
     {
@@ -162,20 +162,19 @@ const App = () => {
         <h2>VistaLab's ISET Online Simulator</h2>
         <h4>Stanford University</h4>
         <p>
-        Welcome to our Online Camera Simulator.
-        We've used our ISET tools to generate a large number
-        of wavelength-dependent scenes, and created
-        optical images from them using a number of lenses.
-        Since the computation involved can be daunting, we've
-        pre-computed the images that are then recorded when
-        using a number of currently-available sensors.
+          Welcome to our Online Camera Simulator. We've used our ISET tools to
+          generate a large number of wavelength-dependent scenes, and created
+          optical images from them using a number of lenses. Since the
+          computation involved can be daunting, we've pre-computed the images
+          that are then recorded when using a number of currently-available
+          sensors.
         </p>
         <p>
-          You can select a scene, a lens, and a sensor, to get a highly-accurate 
-          simulated image. From there you can download the Voltage response that can 
-          be used to evaluate your own image processing pipeline, or a JPEG with
-          a simple rendering, or the original Optical Image if you want to do further
-          analysis on your own.
+          You can select a scene, a lens, and a sensor, to get a highly-accurate
+          simulated image. From there you can download the Voltage response that
+          can be used to evaluate your own image processing pipeline, or a JPEG
+          with a simple rendering, or the original Optical Image if you want to
+          do further analysis on your own.
         </p>
       </CRow>
       <CRow className='align-items-start'>
@@ -202,44 +201,43 @@ const App = () => {
           </CRow>
           <CRow>
             <Slider>
-              aria-label='Exposure Time'
-              defaultValue={.1}
-              valueLabelDisplay='auto'
-              step={.05}
-              marks
-              min={0}
+              aria-label='Exposure Time' defaultValue={0.1}
+              valueLabelDisplay='auto' step={0.05}
+              marks min={0}
               max={1}
-            </Slider>            >
+            </Slider>{' '}
           </CRow>
-          <CRow className='align-items-center'>
-            Sensor Exposure Time
-          </CRow>
+          <CRow className='align-items-center'>Sensor Exposure Time</CRow>
           <CRow>
             <button id='dlSensorVolts' onClick={buttonDownload}>
               Download Sensor Image (volts)
             </button>
-            </CRow>
-            <CRow>
+          </CRow>
+          <CRow>
             <button id='dlIPRGB' onClick={buttonDownload}>
               Download Processed Image (rgb)
             </button>
-            </CRow>
-            <CRow>
+          </CRow>
+          <CRow>
             <button id='dlOI' onClick={buttonDownload}>
               Download Optical Image (large)
             </button>
           </CRow>
+          <CRow> 
+          <CCol>'Exposure Time:  "</CCol>
+          <CCol>.5555</CCol>
+          </CRow>
         </CCol>
       </CRow>
       <CFooter>
-  <div>
-    <span>&copy; 2022 VistaLab, Stanford University</span>
-  </div>
-  <div>
-    <span>Authored by</span>
-    <CLink href="https://vistalab.stanford.edu">VistaLab Team</CLink>
-  </div>
-</CFooter>
+        <div>
+          <span>&copy; 2022 VistaLab, Stanford University</span>
+        </div>
+        <div>
+          <span>Authored by</span>
+          <CLink href='https://vistalab.stanford.edu'>VistaLab Team</CLink>
+        </div>
+      </CFooter>
     </CContainer>
   )
 }
