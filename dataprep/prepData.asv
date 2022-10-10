@@ -68,6 +68,9 @@ for ii = 1:numel(oiFiles)
     oiDataFile = fullfile(outputFolder,'oi',[fName fSuffix]);
     copyfile(which(oiFiles{ii}), oiDataFile);
 
+    % Save the copy location for use in image metadata
+    oiFiles{ii}.dataFile = oiDataFile;
+
     % Pre-compute sensor images
     if ~isfolder(fullfile(outputFolder,'images'))
         mkdir(fullfile(outputFolder,'images'))
@@ -131,17 +134,15 @@ for ii = 1:numel(oiFiles)
         sensor.metadata.aeMethod = aeMethod;
 
         % Save OI & Raw sensor file locations
-        sensor.metadata.oiFile = oiDataFile;
-
-        % Write out the 'raw' voltage file
-        sensorDataFile = [fName '-' sName '.json'];
-        sensor.metadata.sensorRawFile = sensorDataFile;
-        jsonwrite(fullfile(outputFolder,'images', sensorDataFile), sensor);
+        sensor.metadata.oiFile = oiFiles{ii}.oiDataFile;
 
         % We ONLY write out the metadata in the main .json
         % file to keep it of reasonable size
         imageMetadataArray = [imageMetadataArray sensor.metadata];
         
+        sensor.metadata.sensorRawFile = 
+        jsonwrite(fullfile(outputFolder,'images', [fName '-' sName '.json']), sensor);
+
     end
 
     % We can write metadata as one file -- but since it is only

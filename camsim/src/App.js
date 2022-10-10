@@ -170,7 +170,7 @@ const App = () => {
       case 'dlSensorVolts':
         dlPath = selectedRow.sensorRawFile
         // dlName should be something local!!
-        dlName = selectedRow.sensorRawFile
+        dlName = 'sensor volts.json'
         break
       case 'dlIPRGB': // Working
         dlPath = selectedRow.preview
