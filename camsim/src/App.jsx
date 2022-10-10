@@ -151,12 +151,8 @@ const App = () => {
     aeMethod = document.getElementById('aeMethod')
     aeMethod.textContent = event.data.aeMethod
 
-    // Update Slider
+    // Update Slider back to 0?
 
-    expSlider.min = event.data.eTime / 4
-    expSlider.max = event.data.eTime * 4
-    expSlider.value = event.data.eTime
-    expSlider.steps = event.data.eTime
   }, [])
 
   // Handle download buttons
@@ -196,22 +192,35 @@ const App = () => {
 
   const expMarks = [
     {
+      value: -6,
+      label: '-6'
+    },
+    {
+      value: -4,
+      label: '-4'
+    },
+    {
+      value: -2,
+      label: '-2'
+    },
+    {
       value: 0,
-      label: '0°C'
-    },
-    {
-      value: 0.2,
-      label: '20°C'
-    },
-    {
-      value: 0.37,
-      label: '37°C'
-    },
-    {
-      value: 1.0,
-      label: '100°C'
+      label: '0'
     }
-  ]
+    ,
+    {
+      value: 2,
+      label: '+2'
+    },
+    {
+      value: 4,
+      label: '+4'
+    },
+    {
+      value: 6,
+      label: '+6'
+    }
+    ]
 
   // Grafted from slider demo for now
   const [expValue, setValue] = useState(20)
@@ -270,17 +279,17 @@ const App = () => {
             <Box>
               <Slider
                 ref={expSlider}
-                aria-label='Exposure Time'
-                defaultValue={.1}
+                aria-label='Exposure in f-Stops'
+                defaultValue={0}
                 valueLabelDisplay='on'
-                min={0}
-                max={10}
-                step={.1}
-                marks
+                min={-6}
+                max={6}
+                step={1}
+                marks={expMarks}
                 value={expValue}
                 onChange={changeExpValue}
               />
-              <p className='align-items-center'> Sensor Exposure Time </p>
+              <p align='center'> Sensor Exposure Time in f-Stops </p>
             </Box>
           </CRow>
           <CRow>
