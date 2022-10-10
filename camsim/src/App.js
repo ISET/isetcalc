@@ -59,7 +59,8 @@ for (let ii = 0; ii < imageData.length; ii++) {
 
       // Used for download files
       jpegFile: imageData[ii].jpegName,
-      sensorRawFile: imageData[ii].sensorRawFile,
+      sensorRawFile: imageDir + imageData[ii].sensorRawFile,
+      sensorRawName: imageData[ii].sensorRawFile,
       oiFile: imageData[ii].oiFile,
 
       // Used for other metadata properties
@@ -94,7 +95,8 @@ const App = () => {
     // Hidden fields for addtional info
     { headerName: 'Preview', field: 'preview', hide: true },
     { headerName: 'jpegName', field: 'jpegName', hide: true },
-    { headerName: 'sensorRawName', field: 'sensorRawFile', hide: true },
+    { headerName: 'sensorRawFile', field: 'sensorRawFile', hide: true },
+    { headerName: 'sensorRawName', field: 'sensorRawName', hide: true },
     { headerName: 'oiName', field: 'oiFile', hide: true },
     { headerName: 'ExposureTime', field: 'eTime', hide: true },
     { headerName: 'AE-Method', field: 'aeMethod', hide: true }
@@ -170,7 +172,7 @@ const App = () => {
       case 'dlSensorVolts':
         dlPath = selectedRow.sensorRawFile
         // dlName should be something local!!
-        dlName = 'sensor volts.json'
+        dlName = selectedRow.sensorRawName
         break
       case 'dlIPRGB': // Working
         dlPath = selectedRow.preview
