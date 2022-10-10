@@ -26,6 +26,7 @@ import Slider from '@mui/material/Slider'
 
 // Additional components
 import { saveAs } from 'file-saver'
+import { PopupComponent } from 'ag-grid-community'
 
 // Load our rendered sensor images
 // They are located in sub-folders under /public
@@ -170,6 +171,10 @@ const App = () => {
   let dlName = ''
   let dlPath = ''
   const buttonDownload = useCallback(event => {
+    if (selectedRow == undefined){{
+      window.alert("You need to select a sensor image first.");
+      return;
+    }}
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
