@@ -184,7 +184,7 @@ const App = () => {
     saveAs(process.env.PUBLIC_URL + dlPath, dlName)
   }, [])
 
-  var expMarks = [
+  const expMarks = [
     {
       value: 0,
       label: '0°C',
@@ -204,16 +204,18 @@ const App = () => {
   ];
 
   // Grafted from slider demo for now
-  const [value, setExpValue] = useState(20);
+  const [expValue, setValue] = useState(20);
 
   const changeExpValue = (event, value) => {
-    setExpValue(value);
+    setValue(value);
   };
-  
+ 
   const getExpText = (value) => `${value}`;
 
   return (
+    
     <CContainer fluid>
+
       <CRow>
         <h2>VistaLab's ISET Online Simulator</h2>
         <h4>Stanford University</h4>
@@ -257,16 +259,18 @@ const App = () => {
           </CRow>
           <CRow>
           <Box>
-            <Slider id='expSlider'>
+
+          <Slider id='expSlider'
               aria-label='Exposure Time' 
-              defaultValue={0.5}
-              valueLabelDisplay='auto'
+              defaultValue={5}
+              valueLabelDisplay='on'
               min={0}
-              max={1} 
-              step={0.1}
+              max={100} 
+              step={1}
               marks
-              value={.5}
-            </Slider>
+              value={expValue}
+              onChange={changeExpValue}
+            />
             <p className='align-items-center'> Sensor Exposure Time </p>
             </Box>
           </CRow>
