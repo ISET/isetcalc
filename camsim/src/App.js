@@ -28,8 +28,11 @@ import Slider from '@mui/material/Slider'
 import { saveAs } from 'file-saver'
 
 // Load our rendered sensor images
+// They are located in sub-folders under /public
 let dataDir = './data/'
 let imageDir = '/images/' // Should use /public by default?
+let oiDir = '/oi/'
+
 let imageData = require(dataDir + 'metadata.json')
 
 let previewImage = imageDir + imageData[0].jpegName
@@ -61,7 +64,7 @@ for (let ii = 0; ii < imageData.length; ii++) {
       jpegFile: imageData[ii].jpegName,
       sensorRawFile: imageDir + imageData[ii].sensorRawFile,
       sensorRawName: imageData[ii].sensorRawFile,
-      oiFile: imageData[ii].oiFile,
+      oiName: imageData[ii].oiFile,
 
       // Used for other metadata properties
       eTime: imageData[ii].exposureTime,
@@ -97,7 +100,7 @@ const App = () => {
     { headerName: 'jpegName', field: 'jpegName', hide: true },
     { headerName: 'sensorRawFile', field: 'sensorRawFile', hide: true },
     { headerName: 'sensorRawName', field: 'sensorRawName', hide: true },
-    { headerName: 'oiName', field: 'oiFile', hide: true },
+    { headerName: 'oiName', field: 'oiName', hide: true },
     { headerName: 'ExposureTime', field: 'eTime', hide: true },
     { headerName: 'AE-Method', field: 'aeMethod', hide: true }
   ])
@@ -179,8 +182,9 @@ const App = () => {
         dlName = selectedRow.jpegName
         break
       case 'dlOI':
-        // Maybe similar, but OI can be very large,
-        // so might require something different
+        // OI may be too large?
+        dlPath = oiDir + selectedRow.oiName
+        dlName = selectedRow.oiName        
         break
       default:
       // Nothing

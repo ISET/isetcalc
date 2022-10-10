@@ -131,7 +131,7 @@ for ii = 1:numel(oiFiles)
         sensor.metadata.aeMethod = aeMethod;
 
         % Save OI & Raw sensor file locations
-        sensor.metadata.oiFile = oiDataFile;
+        sensor.metadata.oiFile = [fName fSuffix];
 
         % Write out the 'raw' voltage file
         sensorDataFile = [fName '-' sName '.json'];
