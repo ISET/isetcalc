@@ -21,9 +21,9 @@ import {
 } from '@coreui/react'
 
 // MUI since it has some free bits that CoreUI doesn't
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Slider from '@mui/material/Slider';
+import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
+import Slider from '@mui/material/Slider'
 
 // Additional components
 import { saveAs } from 'file-saver'
@@ -82,6 +82,7 @@ for (let ii = 0; ii < imageData.length; ii++) {
 
 const App = () => {
   const gridRef = useRef()
+  const expSlider = useRef()
 
   // let the grid know which columns and what data to use
   const [rowData] = useState(rows)
@@ -140,25 +141,34 @@ const App = () => {
     selectedRow = event.data
 
     // Change preview caption
-    var pCaption, eTime, aeMethod
+    var pCaption, eTime, aeMethod, eSlider
     pCaption = document.getElementById('previewCaption')
-    pCaption.textContent = event.data.jpegFile;
+    pCaption.textContent = event.data.jpegFile
 
     // Update property table
-    eTime = document.getElementById('eTime');
-    eTime.textContent = event.data.eTime;
-    aeMethod = document.getElementById('aeMethod');
-    aeMethod.textContent = event.data.aeMethod;
+    eTime = document.getElementById('eTime')
+    eTime.textContent = event.data.eTime
+    aeMethod = document.getElementById('aeMethod')
+    aeMethod.textContent = event.data.aeMethod
+
+    // Update Slider
+
+    expSlider.min = event.data.eTime / 4
+    expSlider.max = event.data.eTime * 4
+    expSlider.value = event.data.eTime
+    expSlider.steps = event.data.eTime
   }, [])
 
   // Handle download buttons
   let dlName = ''
   let dlPath = ''
   const buttonDownload = useCallback(event => {
-    if (selectedRow == undefined){{
-      window.alert("You need to select a sensor image first.");
-      return;
-    }}
+    if (selectedRow == undefined) {
+      {
+        window.alert('You need to select a sensor image first.')
+        return
+      }
+    }
     // Need to figure out which scene & which file
     switch (event.currentTarget.id) {
       case 'dlSensorVolts':
@@ -173,7 +183,7 @@ const App = () => {
       case 'dlOI':
         // OI may be too large?
         dlPath = oiDir + selectedRow.oiName
-        dlName = selectedRow.oiName        
+        dlName = selectedRow.oiName
         break
       default:
       // Nothing
@@ -187,35 +197,34 @@ const App = () => {
   const expMarks = [
     {
       value: 0,
-      label: '0°C',
+      label: '0°C'
     },
     {
-      value: .20,
-      label: '20°C',
+      value: 0.2,
+      label: '20°C'
     },
     {
-      value: .37,
-      label: '37°C',
+      value: 0.37,
+      label: '37°C'
     },
     {
-      value: 1.00,
-      label: '100°C',
-    },
-  ];
+      value: 1.0,
+      label: '100°C'
+    }
+  ]
 
   // Grafted from slider demo for now
-  const [expValue, setValue] = useState(20);
+  const [expValue, setValue] = useState(20)
 
   const changeExpValue = (event, value) => {
-    setValue(value);
-  };
- 
-  const getExpText = (value) => `${value}`;
+    setValue(value)
+    // Can we set other properties here?!
+  }
+
+  const getExpText = value => `${value}`
 
   return (
-    
     <CContainer fluid>
-
       <CRow>
         <h2>VistaLab's ISET Online Simulator</h2>
         <h4>Stanford University</h4>
@@ -258,20 +267,20 @@ const App = () => {
             <div id='previewCaption'> No Scene Selected </div>
           </CRow>
           <CRow>
-          <Box>
-
-          <Slider id='expSlider'
-              aria-label='Exposure Time' 
-              defaultValue={5}
-              valueLabelDisplay='on'
-              min={0}
-              max={100} 
-              step={1}
-              marks
-              value={expValue}
-              onChange={changeExpValue}
-            />
-            <p className='align-items-center'> Sensor Exposure Time </p>
+            <Box>
+              <Slider
+                ref={expSlider}
+                aria-label='Exposure Time'
+                defaultValue={.1}
+                valueLabelDisplay='on'
+                min={0}
+                max={10}
+                step={.1}
+                marks
+                value={expValue}
+                onChange={changeExpValue}
+              />
+              <p className='align-items-center'> Sensor Exposure Time </p>
             </Box>
           </CRow>
           <CRow>
