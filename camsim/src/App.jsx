@@ -59,6 +59,9 @@ for (let ii = 0; ii < imageData.length; ii++) {
       lens: imageData[ii].opticsname,
       sensor: imageData[ii].sensorname,
 
+      // For future use
+      illumination: imageData[ii].illumination,
+
       // Used to set the file for the preview window
       preview: imageDir + imageData[ii].jpegName,
 
@@ -98,6 +101,10 @@ const App = () => {
     { headerName: 'Scene', field: 'scene', filter: true },
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
+
+    // Not usable yet
+    { headerName: 'Illumination',field: 'illumination', hide:true},
+
     // Hidden fields for addtional info
     { headerName: 'Preview', field: 'preview', hide: true },
     { headerName: 'jpegName', field: 'jpegName', hide: true },
@@ -147,7 +154,8 @@ const App = () => {
 
     // Update property table
     eTime = document.getElementById('eTime')
-    eTime.textContent = event.data.eTime
+    var exposureTime = event.data.eTime
+    eTime.textContent = exposureTime.toFixed(4) + ' seconds';
     aeMethod = document.getElementById('aeMethod')
     aeMethod.textContent = event.data.aeMethod
 
@@ -222,12 +230,11 @@ const App = () => {
     }
     ]
 
-  // Grafted from slider demo for now
-  const [expValue, setValue] = useState(20)
+  const [expValue, setValue] = useState(0)
 
   const changeExpValue = (event, value) => {
-    setValue(value)
-    // Can we set other properties here?!
+    // This of course needs to be implemented
+    setValue(0)
   }
 
   const getExpText = value => `${value}`
@@ -238,7 +245,7 @@ const App = () => {
         <h2>VistaLab's ISET Online Simulator</h2>
         <h4>Stanford University</h4>
         <p>
-          Welcome to our Online Camera Simulator. We've used our ISET tools to
+          Welcome to Stanford's Online Camera Simulator. We've used our ISET tools to
           generate a large number of wavelength-dependent scenes, and created
           optical images from them using a number of lenses. Since the
           computation involved can be daunting, we've pre-computed the images

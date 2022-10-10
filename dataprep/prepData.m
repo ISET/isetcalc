@@ -134,6 +134,10 @@ for ii = 1:numel(oiFiles)
         % Save OI & Raw sensor file locations
         sensor.metadata.oiFile = [fName fSuffix];
 
+        % WE ALSO WANT ILLUMINATION FROM THE OI
+        % FOR NOW WE"LL BUILD A PLACEHOLDER
+        sensor.metadata.illumination = 'Unknown';
+        
         % Write out the 'raw' voltage file
         sensorDataFile = [fName '-' sName '.json'];
         sensor.metadata.sensorRawFile = sensorDataFile;
