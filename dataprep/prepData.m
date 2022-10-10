@@ -15,7 +15,8 @@ privateDataFolder = fullfile(calcRootPath,'camsim','src','data');
 
 %% Export sensor(s)
 % Provide data for the sensors used so people can work with it on their own
-sensorFiles = {'ar0132atSensorrgb.mat', 'MT9V024SensorRGB.mat'};
+sensorFiles = {'ar0132atSensorrgb.mat', 'MT9V024SensorRGB.mat', ...
+    'ar0132atSensorRGBW.mat', 'imx363.mat'};
 
 if ~isfolder(fullfile(outputFolder,'sensors'))
     mkdir(fullfile(outputFolder,'sensors'))

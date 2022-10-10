@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { render } from 'react-dom'
 import { AgGridReact } from 'ag-grid-react' // the AG Grid React Component
-import MyToolPanel from './myToolPanel.jsx'
 // import MyStatusPanel from './myStatusPanel.jsx';
 
 import 'ag-grid-community/styles/ag-grid.css' // Core grid CSS, always needed
@@ -22,7 +21,9 @@ import {
 } from '@coreui/react'
 
 // MUI since it has some free bits that CoreUI doesn't
-import Slider from '@mui/material/Slider'
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Slider from '@mui/material/Slider';
 
 // Additional components
 import { saveAs } from 'file-saver'
@@ -149,23 +150,6 @@ const App = () => {
     aeMethod = document.getElementById('aeMethod');
     aeMethod.textContent = event.data.aeMethod;
   }, [])
-  const sideBar = useMemo(
-    () => ({
-      toolPanels: [
-        'columns',
-        'filters',
-        {
-          id: 'myToolPanel',
-          labelDefault: 'My Tool Panel',
-          labelKey: 'myToolPanel',
-          iconKey: 'filter',
-          toolPanel: MyToolPanel
-        }
-      ],
-      defaultToolPanel: 'myToolPanel'
-    }),
-    []
-  )
 
   // Handle download buttons
   let dlName = ''
@@ -199,6 +183,34 @@ const App = () => {
     console.log(dlName)
     saveAs(process.env.PUBLIC_URL + dlPath, dlName)
   }, [])
+
+  var expMarks = [
+    {
+      value: 0,
+      label: '0°C',
+    },
+    {
+      value: .20,
+      label: '20°C',
+    },
+    {
+      value: .37,
+      label: '37°C',
+    },
+    {
+      value: 1.00,
+      label: '100°C',
+    },
+  ];
+
+  // Grafted from slider demo for now
+  const [value, setExpValue] = useState(20);
+
+  const changeExpValue = (event, value) => {
+    setExpValue(value);
+  };
+  
+  const getExpText = (value) => `${value}`;
 
   return (
     <CContainer fluid>
@@ -244,14 +256,20 @@ const App = () => {
             <div id='previewCaption'> No Scene Selected </div>
           </CRow>
           <CRow>
-            <Slider>
-              aria-label='Exposure Time' defaultValue={0.1}
-              valueLabelDisplay='auto' step={0.05}
-              marks min={0}
-              max={1}
-            </Slider>{' '}
+          <Box>
+            <Slider id='expSlider'>
+              aria-label='Exposure Time' 
+              defaultValue={0.5}
+              valueLabelDisplay='auto'
+              min={0}
+              max={1} 
+              step={0.1}
+              marks
+              value={.5}
+            </Slider>
+            <p className='align-items-center'> Sensor Exposure Time </p>
+            </Box>
           </CRow>
-          <CRow className='align-items-center'>Sensor Exposure Time</CRow>
           <CRow>
             <button id='dlSensorVolts' onClick={buttonDownload}>
               Download Sensor Image (volts)
