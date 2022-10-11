@@ -56,11 +56,13 @@ for (let ii = 0; ii < imageData.length; ii++) {
       // Columns displayed to user
       thumbnail: imageDir + imageData[ii].thumbnailName,
       scene: imageData[ii].scenename,
+
+      // Just some demo data
+      illumination: imageData[ii].illumination,
+
       lens: imageData[ii].opticsname,
       sensor: imageData[ii].sensorname,
 
-      // For future use
-      illumination: imageData[ii].illumination,
 
       // Used to set the file for the preview window
       preview: imageDir + imageData[ii].jpegName,
@@ -99,12 +101,11 @@ const App = () => {
       cellRenderer: ImageRenderer
     },
     { headerName: 'Scene', field: 'scene', filter: true },
+    // Demo only so far
+    { headerName: 'Lighting',field: 'illumination', filter:true},
+
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
-
-    // Not usable yet
-    { headerName: 'Illumination',field: 'illumination', hide:true},
-
     // Hidden fields for addtional info
     { headerName: 'Preview', field: 'preview', hide: true },
     { headerName: 'jpegName', field: 'jpegName', hide: true },

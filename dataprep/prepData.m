@@ -69,6 +69,16 @@ for ii = 1:numel(oiFiles)
     oiDataFile = fullfile(outputFolder,'oi',[fName fSuffix]);
     copyfile(which(oiFiles{ii}), oiDataFile);
 
+    % Total hack to prototype lighting
+    illumination = 'unknown';
+    switch(fName)
+        case 'oi_001'
+            illumination = 'daylight';
+        case 'oi_002'
+            illumination = 'night';
+        case 'oi_fog'
+            illumination = 'fog';
+    end
     % Pre-compute sensor images
     if ~isfolder(fullfile(outputFolder,'images'))
         mkdir(fullfile(outputFolder,'images'))
@@ -135,9 +145,9 @@ for ii = 1:numel(oiFiles)
         sensor.metadata.oiFile = [fName fSuffix];
 
         % WE ALSO WANT ILLUMINATION FROM THE OI
-        % FOR NOW WE"LL BUILD A PLACEHOLDER
-        sensor.metadata.illumination = 'Unknown';
-        
+        % FOR NOW We've stuck in some simple examples
+        sensor.metadata.illumination = illumination;
+
         % Write out the 'raw' voltage file
         sensorDataFile = [fName '-' sName '.json'];
         sensor.metadata.sensorRawFile = sensorDataFile;
