@@ -100,9 +100,9 @@ const App = () => {
       field: 'thumbnail',
       cellRenderer: ImageRenderer
     },
-    { headerName: 'Scene', field: 'scene', filter: true },
+    { headerName: 'Scene', field: 'scene', width:128, filter: true },
     // Demo only so far
-    { headerName: 'Lighting',field: 'illumination', filter:true},
+    { headerName: 'Lighting',field: 'illumination', width:100, filter:true},
 
     { headerName: 'Lens Used', field: 'lens', filter: true },
     { headerName: 'Sensor', field: 'sensor', filter: true },
@@ -263,7 +263,7 @@ const App = () => {
       </CRow>
       <CRow className='align-items-start'>
         <CCol className='align-items-start'>
-          <div className='ag-theme-alpine' style={{ width: 800, height: 600 }}>
+          <div className='ag-theme-alpine' style={{ width: 700, height: 600 }}>
             <AgGridReact
               ref={gridRef} // Ref for accessing Grid's API
               rowData={rowData} // Row Data for Rows
@@ -276,7 +276,7 @@ const App = () => {
             />
           </div>
         </CCol>
-        <CCol width={400} height={400}>
+        <CCol width={300} height={400}>
           <CRow className='align-items-center'>
             <CImage id='previewImage' rounded thumbnail src={previewImage} />
           </CRow>
