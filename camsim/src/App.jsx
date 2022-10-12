@@ -201,33 +201,16 @@ const App = () => {
 
   const expMarks = [
     {
-      value: -6,
-      label: '-6'
+      value: 1,
+      label: '1'
     },
     {
-      value: -4,
-      label: '-4'
+      value: 3,
+      label: '3'
     },
     {
-      value: -2,
-      label: '-2'
-    },
-    {
-      value: 0,
-      label: '0'
-    }
-    ,
-    {
-      value: 2,
-      label: '+2'
-    },
-    {
-      value: 4,
-      label: '+4'
-    },
-    {
-      value: 6,
-      label: '+6'
+      value: 5,
+      label: '5'
     }
     ]
 
@@ -294,12 +277,12 @@ const App = () => {
             <Box>
               <Slider
                 ref={expSlider}
-                aria-label='Exposure in f-Stops'
-                defaultValue={0}
+                aria-label='Exposure in f-Stops or Number of Frames'
+                defaultValue={3}
                 valueLabelDisplay='on'
-                min={-6}
-                max={6}
-                step={1}
+                min={1}
+                max={5}
+                step={2}
                 marks={expMarks}
                 value={expValue}
                 onChange={changeExpValue}
