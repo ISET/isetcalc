@@ -10,7 +10,7 @@ import ImageRenderer from './ImageRenderer.jsx'
 // Core UI & Bootstrap
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { CContainer, CRow, CCol, CImage, CFooter, CLink } from '@coreui/react'
+import { CContainer, CButton, CButtonGroup, CRow, CCol, CImage, CFooter, CLink } from '@coreui/react'
 import {
   CTable,
   CTableHead,
@@ -282,6 +282,13 @@ const App = () => {
           </CRow>
           <CRow className='align-items-center'>
             <div id='previewCaption'> No Scene Selected </div>
+          </CRow>
+          <CRow>
+          <CButtonGroup role="group" aria-label="Exposure Options">
+  <CButton color="primary">Auto-Exposure</CButton>
+  <CButton color="primary">Burst</CButton>
+  <CButton color="primary">Bracketed</CButton>
+</CButtonGroup>
           </CRow>
           <CRow>
             <Box>
